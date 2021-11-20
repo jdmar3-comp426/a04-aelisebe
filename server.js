@@ -28,7 +28,7 @@ app.get("/app/", (req, res, next) => {
 app.post("/app/new/", (req, res) => {	
 	
 	const stmt = db.prepare("INSERT INTO userinfo (user,pass) VALUES (?,?)").run(req.body.user, md5(req.body.pass));
-	res.status(200).json({"message": "1 record created: ID %id% (201)".replace("%id%", stmt.lastInsertRowid)}, {"id": stmt.lastInsertRowid, "user": req.body.user, "pass": md5(req.body.pass)});
+	res.status(201).json({"message": "1 record created: ID %id% (201)".replace("%id%", stmt.lastInsertRowid)}, {"id": stmt.lastInsertRowid, "user": req.body.user, "pass": md5(req.body.pass)});
 });
 // READ a list of all users (HTTP method GET) at endpoint /app/users/
 app.get("/app/users/", (req, res) => {	
