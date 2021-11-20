@@ -15,11 +15,11 @@ app.use(express.json());
 var HTTP_PORT = 5000;
 // Start server
 app.listen(HTTP_PORT, () => {
-    console.log("Server running on port %PORT%".replace("%PORT%",HTTP_PORT))
+    //console.log("Server running on port %PORT%".replace("%PORT%",HTTP_PORT))
 });
 // READ (HTTP method GET) at root endpoint /app/
 app.get("/app/", (req, res, next) => {
-    res.json({"message":"Your API is working! (200)"});
+    res.json({"message":"Your API works! (200)"});
 	res.status(200);
 });
 
@@ -27,7 +27,7 @@ app.get("/app/", (req, res, next) => {
 // CREATE a new user (HTTP method POST) at endpoint /app/new/
 app.post("/app/new/", (req, res) => {	
 	const stmt = db.prepare("INSERT INTO userinfo (user,pass) VALUES (?,?)").run(req.body.user, md5(req.body.pass));
-	res.status(201).json({"message": "1 record created: ID ? (201)".format(stmt.id)}, {"id": stmt.id, "user": stmt.user, "pass": md5(stmt.pass)});
+	res.status(201).json({"message": "1 record created: ID %id% (201)".replace("%id%", stmt.id)}, {"id": stmt.id, "user": stmt.user, "pass": md5(stmt.pass)});
 });
 // READ a list of all users (HTTP method GET) at endpoint /app/users/
 app.get("/app/users/", (req, res) => {	
@@ -48,7 +48,7 @@ app.patch("/app/update/user/:id", (req, res) => {
 // DELETE a single user (HTTP method DELETE) at endpoint /app/delete/user/:id
 app.delete("/app/delete/user/:id", (req, res) => {
 	const stmt = db.prepare("DELETE FROM userinfo WHERE id = ?").run(req.params.id);
-	res.status(200).json({"message": "? record deleted: ID ? (200)".format(stmt.changes(), req.params.id)});
+	res.status(200).json({"message": "1 record deleted: ID %id% (200)".replace("%id%", req.params.id)});
 })
 // Default response for any other request
 app.use(function(req, res){
